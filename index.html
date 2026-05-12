@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة ولي الأمر | مدرسة أُسيد بن حضير</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <style>
+        :root {
+            --bg: #f8fafc; --white: #ffffff; --primary: #1e293b; --accent: #2563eb;
+            --success: #10b981; --border: #e2e8f0; --text-muted: #64748b;
+        }
+
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; box-sizing: border-box; }
+
+        .login-box { background: var(--white); padding: 40px; border-radius: 30px; border: 1px solid var(--border); box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 400px; text-align: center; }
+        .login-box h2 { margin-bottom: 10px; font-weight: 900; color: var(--primary); }
+        
+        .form-group { text-align: right; margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 8px; }
+        .inp { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); font-family: 'Cairo'; font-weight: 700; outline: none; box-sizing: border-box; background: #fcfdfe; }
+        .btn-login { width: 100%; padding: 15px; border-radius: 12px; border: none; background: var(--accent); color: white; font-weight: 800; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        .btn-login:hover { background: var(--primary); }
+
+        /* لوحة عرض التقارير */
+        #reportDashboard { display: none; width: 100%; max-width: 600px; }
+        .std-header { background: var(--primary); color: white; padding: 25px; border-radius: 25px 25px 0 0; text-align: right; }
+        
+        .reports-container { background: white; border-radius: 0 0 25px 25px; border: 1px solid var(--border); padding: 20px; max-height: 70vh; overflow-y: auto; }
+        .report-item { background: #f8fafc; border-radius: 15px; padding: 15px; margin-bottom: 15px; border-right: 5px solid var(--accent); }
+        .report-date { font-size: 11px; color: var(--text-muted); font-weight: 800; }
+        .report-meta { display: flex; justify-content: space-between; margin: 10px 0; }
+        .badge { padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; }
+        
+        /* ألوان التقييم */
+        .lvl-exc { background: #ecfdf5; color: #059669; }
+        .lvl-cre { background: #f5f3ff; color: #7c3aed; }
+        .lvl-vg { background: #f0f9ff; color: #0284c7; }
+        .lvl-fa { background: #fffbeb; color: #d97706; }
+        .lvl-we { background: #fef2f2; color: #dc2626; }
+
+        .msg-content { background: white; padding: 12px; border-radius: 10px; font-size: 14px; border: 1px solid #edf2f7; line-height: 1.6; }
+        .no-data { text-align: center; padding: 40px; color: var(--text-muted); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div id="loginArea" class="login-box">
+    <div style="background: var(--accent); color: white; width: 50px; height: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 24px; margin: 0 auto 20px;">أ</div>
+    <h2>بوابة ولي الأمر</h2>
+    <p style="color:var(--text-muted); font-size:13px; margin-bottom:25px;">لمتابعة مستوى ابنكم الدراسي والواجبات اليومية</p>
+    
+    <div class="form-group">
+        <label>اسم المستخدم (p_xxxx)</label>
+        <input type="text" id="userInput" class="inp" placeholder="أدخل اسم المستخدم">
+    </div>
+    
+    <div class="form-group">
+        <label>كلمة السر</label>
+        <input type="password" id="passInput" class="inp" placeholder="****">
+    </div>
+    
+    <button class="btn-login" onclick="login()">دخول للاطلاع على التقارير 🔓</button>
+    <p id="errorMsg" style="color:var(--lvl-we); font-size:12px; margin-top:15px; display:none; font-weight:bold;">بيانات الدخول غير صحيحة!</p>
+</div>
+
+<div id="reportDashboard">
+    <div class="std-header">
+        <h3 id="stdName" style="margin:0; font-size:20px;">اسم الطالب</h3>
+        <p id="stdClass" style="margin:5px 0 0; font-size:13px; opacity:0.8;">الفصل: ---</p>
+    </div>
+
+    <div class="reports-container" id="reportsList">
+        <div class="no-data">جاري تحميل التقارير...</div>
+    </div>
+    
+    <button class="btn-login" style="background: #64748b; margin-top: 20px; border-radius: 20px;" onclick="location.reload()">تسجيل الخروج</button>
+</div>
+
+<script>
+    // إعدادات Firebase (نفس التي استخدمناها في بوابة المعلم)
+    const firebaseConfig = {
+        apiKey: "AIzaSyCIW17B6y6sG_bdUFqF7FWoVIY9ynXv1B4",
+        authDomain: "myschoolproject-4ad92.firebaseapp.com",
+        databaseURL: "https://myschoolproject-4ad92-default-rtdb.firebaseio.com",
+        projectId: "myschoolproject-4ad92",
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    const levelNames = {
+        'exc': 'متميز ✨', 'cre': 'مبدع 🎨', 'vg': 'جيد جداً 👍', 'fa': 'مقبول 🆗', 'we': 'ضعيف ⚠️'
+    };
+
+    function login() {
+        const u = document.getElementById('userInput').value;
+        const p = document.getElementById('passInput').value;
+        const err = document.getElementById('errorMsg');
+
+        // البحث في جميع الفصول عن الطالب الذي يملك هذه البيانات
+        database.ref('students').once('value', snapshot => {
+            const classes = snapshot.val();
+            let foundStudent = null;
+            let studentKey = "";
+            let className = "";
+
+            for (let cls in classes) {
+                for (let sKey in classes[cls]) {
+                    if (classes[cls][sKey].user === u && classes[cls][sKey].pass.toString() === p) {
+                        foundStudent = classes[cls][sKey];
+                        studentKey = sKey;
+                        className = cls;
+                        break;
+                    }
+                }
+                if (foundStudent) break;
+            }
+
+            if (foundStudent) {
+                showDashboard(foundStudent, studentKey, className);
+            } else {
+                err.style.display = 'block';
+            }
+        });
+    }
+
+    function showDashboard(student, sKey, cls) {
+        document.getElementById('loginArea').style.display = 'none';
+        document.getElementById('reportDashboard').style.display = 'block';
+        document.getElementById('stdName').innerText = student.name;
+        document.getElementById('stdClass').innerText = "الفصل: " + cls;
+
+        // جلب التقييمات المسجلة لهذا الطالب
+        database.ref('evaluations/' + cls + '/' + sKey).on('value', snapshot => {
+            const evals = snapshot.val();
+            const list = document.getElementById('reportsList');
+            list.innerHTML = "";
+
+            if (!evals) {
+                list.innerHTML = `<div class="no-data">لا توجد تقارير مسجلة حتى الآن.</div>`;
+                return;
+            }
+
+            // تحويل الكائن إلى مصفوفة لعرض الأحدث أولاً
+            const sortedEvals = Object.values(evals).reverse();
+
+            sortedEvals.forEach(ev => {
+                list.innerHTML += `
+                    <div class="report-item">
+                        <div class="report-date">التاريخ: ${ev.date}</div>
+                        <div class="report-meta">
+                            <div><span style="font-size:12px; color:var(--text-muted);">المادة:</span> <strong>${ev.subject}</strong></div>
+                            <span class="badge lvl-${ev.level}">${levelNames[ev.level]}</span>
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <span style="font-size:12px; color:var(--text-muted);">الواجب:</span> 
+                            <b style="color:var(--accent)">${ev.homework || 'لا يوجد'}</b>
+                        </div>
+                        <div class="msg-content">💬 ${ev.message}</div>
+                    </div>
+                `;
+            });
+        });
+    }
+</script>
+</body>
+</html>
