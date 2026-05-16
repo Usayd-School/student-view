@@ -42,6 +42,13 @@
         .report-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
         .badge { padding: 5px 12px; border-radius: 10px; font-size: 11px; font-weight: 800; }
         
+        /* زر تحميل ورقة العمل المميز */
+        .download-btn { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #2563eb, #3b82f6); color: white; text-decoration: none; padding: 10px 16px; border-radius: 12px; font-size: 12px; font-weight: 700; margin-top: 10px; transition: 0.2s; box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
+        .download-btn:active { transform: scale(0.97); }
+
+        /* مؤشر حالة التواجد والاطلاع لولي الأمر */
+        .seen-status-container { background: #dcfce7; color: #166534; padding: 8px 15px; border-radius: 12px; font-size: 11px; font-weight: 700; display: inline-block; margin-top: 5px; border: 1px solid #bbf7d0; }
+
         /* Popup Styles */
         #popup { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
         .popup-box { background: white; padding: 30px; border-radius: 30px; width: 100%; max-width: 450px; max-height: 80vh; overflow-y: auto; }
@@ -66,7 +73,8 @@
     <nav class="navbar">
         <div>
             <h3 id="stdName" style="margin:0; font-size:18px;">اسم الطالب</h3>
-            <small id="stdClass" style="color:var(--text-muted)">الفصل: --</small>
+            <small id="stdClass" style="color:var(--text-muted); display:block;">الفصل: --</small>
+            <div id="seenBadgeLocation"></div>
         </div>
         <button class="btn-action" style="width:auto; padding:8px 20px; font-size:12px; background:var(--dark)" onclick="location.reload()">خروج</button>
     </nav>
@@ -107,8 +115,8 @@
     let allEvals = [];
 
     function login() {
-        const u = document.getElementById('userInput').value;
-        const p = document.getElementById('passInput').value;
+        const u = document.getElementById('userInput').value.trim();
+        const p = document.getElementById('passInput').value.trim();
         database.ref('students').once('value', snap => {
             let found = null, sK = "", cl = "";
             const data = snap.val();
@@ -119,9 +127,21 @@
                     }
                 }
             }
-            if(found) loadData(found, sK, cl);
+            if(found) {
+                registerParentView(cl, sK); // رصد وتثبيت الاطلاع فور تسجيل الدخول بنجاح
+                loadData(found, sK, cl);
+            }
             else document.getElementById('errorMsg').style.display='block';
         });
+    }
+
+    // دالة تحديث حالة ومؤشر الاطلاع في الفايربيس لمتابعة من لم يطلع
+    function registerParentView(cls, sKey) {
+        const now = new Date();
+        const formattedTime = now.toLocaleDateString('ar-SA') + ' - ' + now.toLocaleTimeString('ar-SA');
+        
+        // حفظ آخر موعد تم الاطلاع فيه في سجل الطالب مباشرة ليتسنى للمعلمين رؤيتها
+        database.ref('students/' + cls + '/' + sKey + '/lastSeen').set(formattedTime);
     }
 
     function loadData(student, sKey, cls) {
@@ -129,6 +149,9 @@
         document.getElementById('reportDashboard').style.display='block';
         document.getElementById('stdName').innerText = student.name;
         document.getElementById('stdClass').innerText = "الفصل: " + cls;
+        
+        // عرض تأكيد مرئي لولي الأمر داخل حسابه بأنه تم رصد تواجده واطلاعه بنجاح
+        document.getElementById('seenBadgeLocation').innerHTML = `<div class="seen-status-container">✓ تم تأكيد اطلاعك على التقارير للإدارة</div>`;
 
         database.ref('evaluations/'+cls+'/'+sKey).on('value', snap => {
             const data = snap.val();
@@ -145,6 +168,18 @@
                 if(ev.award === 'silver') stats.silver++;
                 if(ev.award === 'bronze') stats.bronze++;
                 if(ev.warning) stats.warn++;
+
+                // فحص ما إذا كان هناك ملف ورقة عمل مرفق مع التقرير
+                let fileBtnHtml = "";
+                if (ev.worksheet) {
+                    fileBtnHtml = `
+                        <div style="margin-top:10px;">
+                            <a href="${ev.worksheet}" download="ورقة_عمل_${ev.subject || 'درس'}.png" class="download-btn">
+                                📥 تحميل ورقة العمل المرفقة
+                            </a>
+                        </div>
+                    `;
+                }
 
                 list.innerHTML += `
                     <div class="report-item">
@@ -165,6 +200,7 @@
                         <div style="background:#fff; padding:10px; border-radius:12px; font-size:13px; border:1px solid #eee">
                             💬 ${ev.message || 'لا توجد ملاحظات إضافية'}
                         </div>
+                        ${fileBtnHtml}
                     </div>
                 `;
             });
@@ -179,8 +215,6 @@
 
     function showDetails(type) {
         let content = "";
-        let title = "";
-        
         allEvals.forEach(ev => {
             let match = false;
             if(type === 'exc' && ev.level === 'exc') match = true;
