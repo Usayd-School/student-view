@@ -61,7 +61,6 @@
         
         .nafess-rewards-summary { background: rgba(255, 255, 255, 0.15); border-radius: 18px; padding: 15px; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(5px); }
 
-        /* تعديل صندوق المهارات ليصبح على شكل وحدات مستقلة بمكافأة ميدالية */
         .current-units-box { background: rgba(255, 255, 255, 0.06); border-radius: 22px; padding: 18px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
         .unit-card-item { background: rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 12px 15px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
         .unit-card-item:last-child { margin-bottom: 0; }
@@ -75,7 +74,6 @@
         .available-badges-container { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
         .avail-badge { background: rgba(245, 158, 11, 0.2); color: #fef08a; border: 1px solid rgba(245, 158, 11, 0.4); padding: 4px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
 
-        /* لوحة المنافسة وترتيب الطلاب - Leaderboard */
         .leaderboard-box { background: rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 15px; margin-top: 15px; border: 1px solid rgba(255,255,255,0.1); }
         .leaderboard-title { font-size: 14px; font-weight: 800; color: #fef08a; margin: 0 0 12px 0; display: flex; align-items: center; gap: 6px; }
         .leaderboard-table { width: 100%; border-collapse: collapse; text-align: right; font-size: 13px; }
@@ -101,8 +99,8 @@
 <div id="loginArea" class="login-box">
     <div style="background: var(--primary); color: white; width: 50px; height: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 24px; margin: 0 auto 20px;">أ</div>
     <h2>بوابة ولي الأمر</h2>
+    <!-- تم إبقاء حقل اسم المستخدم فقط -->
     <input type="text" id="userInput" class="inp" placeholder="اسم المستخدم">
-    <input type="password" id="passInput" class="inp" placeholder="كلمة السر">
     <button class="btn-action" onclick="login()">دخول للاطلاع 🔓</button>
     <p id="errorMsg" style="color:red; font-size:12px; margin-top:15px; display:none; font-weight:bold;">بيانات الدخول غير صحيحة!</p>
 </div>
@@ -262,14 +260,14 @@
 
     function login() {
         const u = cleanString(document.getElementById('userInput').value).toLowerCase();
-        const p = cleanString(document.getElementById('passInput').value);
         
         database.ref('students').once('value', snap => {
             let found = null, sK = "", cl = "", sId = "";
             const data = snap.val() || {};
             
             for(let k in data) {
-                if(data[k].studentUser === u && data[k].studentPass.toString() === p) {
+                // تم تعديل الشرط ليتأكد من اسم المستخدم فقط
+                if(data[k].studentUser === u) {
                     found = data[k]; 
                     sK = k; 
                     cl = data[k].className;
