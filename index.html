@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة ولي الأمر |</title>
+    <title>بوابة ولي الأمر | Taalamna 🚀</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -51,6 +51,11 @@
         .popup-box { background: white; padding: 30px; border-radius: 30px; width: 100%; max-width: 450px; max-height: 80vh; overflow-y: auto; }
 
         .lvl-exc { background: var(--exc-bg); color: var(--exc-txt); }
+        .lvl-cre { background: #e0e7ff; color: #3730a3; }
+        .lvl-vg  { background: #dbeafe; color: #1e40af; }
+        .lvl-fa  { background: #fef3c7; color: #b45309; }
+        .lvl-we  { background: var(--we-bg); color: var(--we-txt); }
+        
         .warning-badge { background: #fee2e2; color: #dc2626; padding: 2px 8px; border-radius: 6px; font-size: 10px; margin-right: 5px; }
         .award-text { color: #d97706; font-weight: 800; font-size: 13px; }
 
@@ -92,6 +97,60 @@
         .week-item { padding: 10px; border-radius: 15px; text-align: center; font-size: 12px; font-weight: 700; background: white; border: 1px solid rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; }
         .week-item.completed { background: #e2fbf0; color: #10b981; border-color: #a7f3d0; }
         .week-item.current { background: var(--primary); color: white; border-color: var(--primary); transform: scale(1.05); }
+
+        /* أنماط بطاقة الترتيب المحدثة وشريط الطاقة */
+        .rank-card-compact {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 12px 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: var(--shadow1);
+            margin-top: 8px;
+        }
+        .rank-card-compact .rank-num-box {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-weight: 900;
+            font-size: 16px;
+            padding: 6px 14px;
+            border-radius: 12px;
+        }
+        .rank-card-compact .diff-box {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .energy-bar-wrapper {
+            width: 100%;
+            min-width: 120px;
+            background: rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
+            height: 16px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+        .energy-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #10b981 100%);
+            border-radius: 20px;
+            transition: width 0.6s ease-in-out;
+        }
+        .energy-bar-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 10px;
+            font-weight: 900;
+            color: #1e293b;
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+        }
     </style>
 </head>
 <body>
@@ -109,11 +168,12 @@
         <div>
             <h3 id="stdName" style="margin:0; font-size:18px;">اسم الطالب</h3>
             <small id="stdClass" style="color:var(--text-muted); display:block; font-weight: 700; margin-top:2px;">الفصل: --</small>
-            <div id="stdRank" class="rank-badge">🏆 ترتيب الطالب الحصري: المرتبة #4 بالصف</div>
-            <div id="seenBadgeLocation"></div>
+            <div id="stdRank" class="rank-badge">🏆 جاري حساب الترتيب الفعلي...</div>
+            <div id="attendanceBadge"></div>
+            <div id="seenBadgeLocation" style="margin-top: 5px;"></div>
         </div>
         <div style="display: flex; gap: 8px;">
-            <button id="toggleNafessBtn" class="btn-action" style="width:auto; padding:8px 16px; font-size:12px; background: linear-gradient(135deg, #f59e0b, #ea580c);" onclick="toggleNafessView()">🎯 بوابة نافس المحاكية</button>
+            <button id="toggleNafessBtn" class="btn-action" style="width:auto; padding:8px 16px; font-size:12px; background: linear-gradient(135deg, #f59e0b, #ea580c); display: none;" onclick="toggleNafessView()">🎯 بوابة نافس المحاكية</button>
             <button class="btn-action" style="width:auto; padding:8px 16px; font-size:12px; background:var(--dark)" onclick="location.reload()">خروج</button>
         </div>
     </nav>
@@ -138,7 +198,6 @@
             <div class="current-units-box">
                 <h4 style="margin: 0 0 12px 0; font-size: 13px; color: #fef08a; display: flex; align-items: center; gap: 6px;">📖 وحدات الأسبوع الحالي والمهارات المستهدفة بمكافأة :</h4>
                 <div id="unitsListContainer">
-                    
                     <div class="unit-card-item">
                         <div class="unit-info-part">
                             <span class="unit-subject-label">📐 الرياضيات</span>
@@ -146,7 +205,6 @@
                         </div>
                         <div class="unit-reward-pill gold-target">المكافأة: ذهبية 🥇</div>
                     </div>
-
                     <div class="unit-card-item">
                         <div class="unit-info-part">
                             <span class="unit-subject-label">🧬 العلوم</span>
@@ -154,7 +212,6 @@
                         </div>
                         <div class="unit-reward-pill gold-target">المكافأة: ذهبية 🥇</div>
                     </div>
-
                     <div class="unit-card-item">
                         <div class="unit-info-part">
                             <span class="unit-subject-label">✍️ لغتي الجميلة</span>
@@ -162,7 +219,6 @@
                         </div>
                         <div class="unit-reward-pill silver-target">المكافأة: فضية 🥈</div>
                     </div>
-
                 </div>
 
                 <h4 style="margin: 15px 0 6px 0; font-size: 12px; color: #a7f3d0;">🏅 الأوسمة المتاحة  هذا الأسبوع:</h4>
@@ -180,20 +236,12 @@
                         <tr>
                             <th>الترتيب</th>
                             <th>الطالب</th>
-                            <th>الفصل</th>
+                            <th>طاقة النقاط ⚡</th>
                             <th>الميداليات 🥇</th>
                         </tr>
                     </thead>
                     <tbody id="leaderboardBody">
-                        <tr><td><span class="rank-num first">1</span></td><td>عبدالله محمد السعيد</td><td>--</td><td>12</td></tr>
-                        <tr><td><span class="rank-num">2</span></td><td>فهد عبد العزيز العبيد</td><td>--</td><td>9</td></tr>
-                        <tr><td><span class="rank-num">3</span></td><td>خالد وليد الشمري</td><td>--</td><td>7</td></tr>
-                        <tr id="currentUserRow" class="leaderboard-row-current">
-                            <td><span class="rank-num" id="leadRank">4</span></td>
-                            <td id="leadName">الطالب الحالي</td>
-                            <td id="leadClass">--</td>
-                            <td id="leadGold">0</td>
-                        </tr>
+                        <!-- سيتم توليد لوحة الشرف تلقائياً هنا -->
                     </tbody>
                 </table>
             </div>
@@ -217,6 +265,10 @@
     <div id="reportsView">
         <div class="stats-grid">
             <div class="stat-card" onclick="showDetails('exc')"><h4>التميز ✨</h4><p id="stat-exc">0</p></div>
+            <div class="stat-card" onclick="showDetails('cre')"><h4>مبدع 🎨</h4><p id="stat-cre">0</p></div>
+            <div class="stat-card" onclick="showDetails('vg')"><h4>جيد جداً 👍</h4><p id="stat-vg">0</p></div>
+            <div class="stat-card" onclick="showDetails('fa')"><h4>مقبول 🆗</h4><p id="stat-fa">0</p></div>
+            <div class="stat-card" onclick="showDetails('we')"><h4>ضعيف 📉</h4><p id="stat-we">0</p></div>
             <div class="stat-card" onclick="showDetails('gold')"><h4>ذهب 🥇</h4><p id="stat-gold">0</p></div>
             <div class="stat-card" onclick="showDetails('silver')"><h4>فضة 🥈</h4><p id="stat-silver">0</p></div>
             <div class="stat-card" onclick="showDetails('bronze')"><h4>برونز 🥉</h4><p id="stat-bronze">0</p></div>
@@ -245,9 +297,15 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    const levelNames = { 'exc': 'متميز ✨', 'cre': 'مبدع 🎨', 'vg': 'جيد جداً 👍', 'fa': 'مقبول 🆗', 'we': 'ضعيف ⚠️' };
+    const levelNames = { 'exc': 'متميز ✨', 'cre': 'مبدع 🎨', 'vg': 'جيد جداً 👍', 'fa': 'مقبول 🆗', 'we': 'ضعيف 📉' };
     const warnNames = { 'yellow': 'انذار أول 🟨', 'red': 'انذار أخير 🟥', 'warning': 'خصم درجة 📌' };
     const awardNames = { 'gold': 'الميدالية الذهبية 🥇', 'silver': 'الميدالية الفضية 🥈', 'bronze': 'الميدالية البرونزية 🥉' };
+
+    // أوزان التقييمات لحساب الترتيب الفعلي
+    const EVAL_WEIGHTS = {
+        'exc': 2, 'cre': 4, 'creative': 4, 'vg': 1, 'fa': 0, 'we': -2, 'weak': -2,
+        'gold': 5, 'silver': 3, 'bronze': 1, 'warn': -3
+    };
 
     let allEvals = [];
     let isNafessActive = false;
@@ -255,6 +313,45 @@
     function cleanString(str) {
         if(!str) return "";
         return str.toString().replace(/[٠-٩]/g, function (d) { return d.charCodeAt(0) - 1632; }).trim();
+    }
+
+    function processClassRankings(studentsArray, evalsData) {
+        let list = studentsArray.map(st => {
+            let studentEvals = evalsData[st.key] || {};
+            let totalPoints = 0;
+            let counts = { exc: 0, cre: 0, vg: 0, fa: 0, we: 0, gold: 0, silver: 0, bronze: 0, warn: 0 };
+
+            Object.values(studentEvals).forEach(ev => {
+                if (ev.level === 'exc') { totalPoints += EVAL_WEIGHTS.exc; counts.exc++; }
+                if (ev.level === 'cre' || ev.level === 'creative') { totalPoints += EVAL_WEIGHTS.cre; counts.cre++; }
+                if (ev.level === 'vg') { totalPoints += EVAL_WEIGHTS.vg; counts.vg++; }
+                if (ev.level === 'fa') { totalPoints += EVAL_WEIGHTS.fa; counts.fa++; }
+                if (ev.level === 'we' || ev.level === 'weak') { totalPoints += EVAL_WEIGHTS.we; counts.we++; }
+                if (ev.award === 'gold') { totalPoints += EVAL_WEIGHTS.gold; counts.gold++; }
+                if (ev.award === 'silver') { totalPoints += EVAL_WEIGHTS.silver; counts.silver++; }
+                if (ev.award === 'bronze') { totalPoints += EVAL_WEIGHTS.bronze; counts.bronze++; }
+                if (ev.warning) { totalPoints += EVAL_WEIGHTS.warn; counts.warn++; }
+            });
+
+            return { ...st, points: totalPoints, counts };
+        });
+
+        list.sort((a, b) => b.points - a.points);
+        const maxPointsInClass = Math.max(...list.map(s => s.points), 10);
+
+        return list.map((st, idx, arr) => {
+            const nextStudent = arr[idx + 1];
+            const diffToNext = nextStudent ? (st.points - nextStudent.points) : 0;
+            const energyPct = Math.min(100, Math.max(5, (st.points / maxPointsInClass) * 100));
+
+            return {
+                ...st,
+                actualRank: idx + 1,
+                diffToNext: diffToNext,
+                hasNextStudent: !!nextStudent,
+                energyPct: energyPct
+            };
+        });
     }
 
     function login() {
@@ -279,7 +376,6 @@
                 database.ref('tenants/' + sId).once('value', tSnap => {
                     let sName = tSnap.val()?.schoolName || "المدرسة المسجلة";
                     loadData(found, sK, cl, sName);
-                    buildWeeksGrid();
                 });
             } else {
                 document.getElementById('errorMsg').style.display='block';
@@ -290,12 +386,7 @@
     function registerParentView(sKey) {
         const now = new Date();
         const formattedTime = now.toLocaleDateString('ar-SA') + ' - ' + now.toLocaleTimeString('ar-SA');
-        
-        // 🟢 تحديث حقل lastLogin بتوقيت ISO ليقرأه نظام الإدارة بنجاح، بالإضافة إلى حقل lastSeen المنسق محلياً
-        database.ref('students/' + sKey).update({
-            lastSeen: formattedTime,
-            lastLogin: now.toISOString()
-        });
+        database.ref('students/' + sKey).update({ lastSeen: formattedTime, lastLogin: now.toISOString() });
     }
 
     function toggleNafessView() {
@@ -312,27 +403,22 @@
         } else {
             nafessView.style.display = 'none';
             reportsView.style.display = 'block';
-            toggleBtn.innerText = "🎯 بوابة نافس ";
+            toggleBtn.innerText = "🎯 بوابة نافس المحاكية";
             toggleBtn.style.background = "linear-gradient(135deg, #f59e0b, #ea580c)";
             isNafessActive = false;
         }
     }
 
-    function buildWeeksGrid() {
+    function buildWeeksGrid(currentWeek) {
         const container = document.getElementById('weeksContainer');
         container.innerHTML = '';
-        const currentWeek = 5;
 
         for (let i = 1; i <= 16; i++) {
             let statusClass = "";
             let text = "أسبوع " + i;
             
-            if (i < currentWeek) {
-                statusClass = "completed";
-                text = i + " ✓";
-            } else if (i === currentWeek) {
-                statusClass = "current";
-            }
+            if (i < currentWeek) { statusClass = "completed"; text = i + " ✓"; } 
+            else if (i === currentWeek) { statusClass = "current"; }
 
             container.innerHTML += `<div class="week-item ${statusClass}">${text}</div>`;
         }
@@ -344,21 +430,115 @@
         
         document.getElementById('stdName').innerText = student.studentName;
         document.getElementById('stdClass').innerText = `المدرسة: ${schoolName} | الفصل: ${cls}`;
-        
-        document.getElementById('leadName').innerText = student.studentName + " (أنت)";
-        document.getElementById('leadClass').innerText = cls;
-
-        let currentRank = student.studentRank || "4";
-        document.getElementById('stdRank').innerText = `🏆 ترتيب الطالب الحصري: المرتبة #${currentRank} بالصف`;
-        document.getElementById('leadRank').innerText = currentRank;
-
-        const rows = document.querySelectorAll('#leaderboardBody tr:not(.leaderboard-row-current)');
-        rows.forEach(row => {
-            row.children[2].innerText = cls;
-        });
-
         document.getElementById('seenBadgeLocation').innerHTML = `<div class="seen-status-container">✓ تم تأكيد اطلاعك على التقارير للإدارة</div>`;
 
+        // حساب الترتيب الفعلي للفصل وشريط الطاقة
+        database.ref('students').once('value', stdSnap => {
+            const allStds = stdSnap.val() || {};
+            let classStudents = [];
+            for(let k in allStds) {
+                if(allStds[k].className === cls) {
+                    classStudents.push({ key: k, ...allStds[k], name: allStds[k].studentName });
+                }
+            }
+
+            database.ref('evaluations/'+cls).on('value', evSnap => {
+                const evalsData = evSnap.val() || {};
+                const rankedList = processClassRankings(classStudents, evalsData);
+                const myData = rankedList.find(s => s.key === sKey);
+
+                if(myData) {
+                    // 1. تحديث بطاقة الترتيب المخصصة
+                    const diffText = myData.hasNextStudent ? `الفرق عن التالي: +${myData.diffToNext} نقطة` : `المركز الأخير بالفصل`;
+                    document.getElementById('stdRank').outerHTML = `
+                        <div id="stdRank" class="rank-card-compact">
+                            <div class="rank-num-box">الترتيب #${myData.actualRank}</div>
+                            <div class="diff-box">📊 ${diffText}</div>
+                        </div>
+                    `;
+
+                    // 2. تحديث لوحة الشرف بشريط الطاقة
+                    const leadBody = document.getElementById('leaderboardBody');
+                    leadBody.innerHTML = '';
+                    
+                    // إضافة أول 3 طلاب
+                    rankedList.slice(0, 3).forEach((st, idx) => {
+                        let tr = document.createElement('tr');
+                        if(st.key === sKey) tr.className = 'leaderboard-row-current';
+                        let rankClass = (idx === 0) ? 'rank-num first' : 'rank-num';
+                        tr.innerHTML = `
+                            <td><span class="${rankClass}">${st.actualRank}</span></td>
+                            <td>${st.name} ${st.key === sKey ? '(أنت)' : ''}</td>
+                            <td>
+                                <div class="energy-bar-wrapper" title="طاقة الطالب: ${st.points} نقطة">
+                                    <div class="energy-bar-fill" style="width: ${st.energyPct}%;"></div>
+                                    <span class="energy-bar-text">⚡ ${st.points}</span>
+                                </div>
+                            </td>
+                            <td>${st.counts.gold}</td>
+                        `;
+                        leadBody.appendChild(tr);
+                    });
+
+                    // إضافة صف الطالب الحالي في الأسفل إذا لم يكن ضمن الأوائل
+                    if(myData.actualRank > 3) {
+                        let myTr = document.createElement('tr');
+                        myTr.className = 'leaderboard-row-current';
+                        myTr.innerHTML = `
+                            <td><span class="rank-num">${myData.actualRank}</span></td>
+                            <td>${myData.name} (أنت)</td>
+                            <td>
+                                <div class="energy-bar-wrapper" title="طاقة الطالب: ${myData.points} نقطة">
+                                    <div class="energy-bar-fill" style="width: ${myData.energyPct}%;"></div>
+                                    <span class="energy-bar-text">⚡ ${myData.points}</span>
+                                </div>
+                            </td>
+                            <td>${myData.counts.gold}</td>
+                        `;
+                        leadBody.appendChild(myTr);
+                    }
+                }
+            });
+        });
+
+        // قراءة حالة الحضور
+        database.ref(`attendance/${cls}`).on('value', snap => {
+            const attData = snap.val();
+            let attHtml = "";
+            if(attData) {
+                const dates = Object.keys(attData).sort().reverse(); 
+                const lastDate = dates[0];
+                const studentAtt = attData[lastDate][sKey];
+                
+                if(studentAtt) {
+                    let statusTxt = 'حاضر ✅';
+                    let bg = '#dcfce7', c = '#166534', br = '#bbf7d0';
+                    if(studentAtt.status === 'absent') { statusTxt = 'غائب ❌'; bg = '#fee2e2'; c = '#991b1b'; br = '#fecaca'; }
+                    if(studentAtt.status === 'late') { statusTxt = 'متأخر ⚠️'; bg = '#fef3c7'; c = '#92400e'; br = '#fde68a'; }
+                    attHtml = `<div style="background: ${bg}; color: ${c}; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; border: 1px solid ${br}; display: inline-block; margin-top: 8px;">سجل الحضور (${lastDate}): ${statusTxt}</div>`;
+                }
+            }
+            document.getElementById('attendanceBadge').innerHTML = attHtml;
+        });
+
+        // قراءة إعدادات بوابة نافس
+        database.ref('schoolSettings/nafess').on('value', snap => {
+            const data = snap.val();
+            const nafessBtn = document.getElementById('toggleNafessBtn');
+            let week = 5;
+            if (data) {
+                week = data.currentWeek ? parseInt(data.currentWeek) : 5;
+                if (data.isActive === false) {
+                    nafessBtn.style.display = 'none';
+                    if (isNafessActive) toggleNafessView();
+                } else {
+                    nafessBtn.style.display = 'inline-flex';
+                }
+            } else { nafessBtn.style.display = 'inline-flex'; }
+            buildWeeksGrid(week);
+        });
+
+        // قراءة سجلات التقارير اليومية وتحديث الإحصائيات (متضمنة مبدع وضعيف)
         database.ref('evaluations/'+cls+'/'+sKey).on('value', snap => {
             const data = snap.val();
             const list = document.getElementById('reportsList');
@@ -366,27 +546,21 @@
             if(!data) { list.innerHTML = "<div style='text-align:center; padding:50px'>لا توجد سجلات تقارير حالية</div>"; return; }
             
             allEvals = Object.values(data).reverse();
-            let stats = { exc:0, gold:0, silver:0, bronze:0, warn:0 };
+            let stats = { exc:0, cre:0, vg:0, fa:0, we:0, gold:0, silver:0, bronze:0, warn:0 };
 
             list.innerHTML = "";
             allEvals.forEach(ev => {
                 if(ev.level === 'exc') stats.exc++;
+                if(ev.level === 'cre' || ev.level === 'creative') stats.cre++;
+                if(ev.level === 'vg') stats.vg++;
+                if(ev.level === 'fa') stats.fa++;
+                if(ev.level === 'we' || ev.level === 'weak') stats.we++;
                 if(ev.award === 'gold') stats.gold++;
                 if(ev.award === 'silver') stats.silver++;
                 if(ev.award === 'bronze') stats.bronze++;
                 if(ev.warning) stats.warn++;
 
-                let fileBtnHtml = "";
-                if (ev.worksheet) {
-                    fileBtnHtml = `
-                        <div style="margin-top:10px;">
-                            <a href="${ev.worksheet}" download="ورقة_عمل_${ev.subject || 'درس'}.png" class="download-btn">
-                                📥 تحميل ورقة العمل المرفقة
-                            </a>
-                        </div>
-                    `;
-                }
-
+                let fileBtnHtml = ev.worksheet ? `<div style="margin-top:10px;"><a href="${ev.worksheet}" download="ورقة_عمل_${ev.subject || 'درس'}.png" class="download-btn">📥 تحميل ورقة العمل المرفقة</a></div>` : "";
                 let unitLessonHtml = ev.unitLesson ? `<span class="unit-badge">📖 ${ev.unitLesson}</span>` : `<span class="unit-badge">📖 وحدة الدرس الحالية</span>`;
 
                 list.innerHTML += `
@@ -395,8 +569,7 @@
                             <div>
                                 <small style="color:var(--text-muted)">${ev.date} | ${ev.time || ''}</small>
                                 <div style="font-weight:900; font-size:16px; margin-top:5px; display:flex; align-items:center; gap:5px; flex-wrap:wrap;">
-                                    <span>مادة: ${ev.subject}</span> 
-                                    ${unitLessonHtml}
+                                    <span>مادة: ${ev.subject}</span> ${unitLessonHtml}
                                 </div>
                             </div>
                             <span class="badge lvl-${ev.level}">${levelNames[ev.level] || 'تم الرصد'}</span>
@@ -417,13 +590,15 @@
             });
 
             document.getElementById('stat-exc').innerText = stats.exc;
+            document.getElementById('stat-cre').innerText = stats.cre;
+            document.getElementById('stat-vg').innerText = stats.vg;
+            document.getElementById('stat-fa').innerText = stats.fa;
+            document.getElementById('stat-we').innerText = stats.we;
             document.getElementById('stat-gold').innerText = stats.gold;
             document.getElementById('stat-silver').innerText = stats.silver;
             document.getElementById('stat-bronze').innerText = stats.bronze;
             document.getElementById('stat-warn').innerText = stats.warn;
-
             document.getElementById('nafessGoldCount').innerText = stats.gold;
-            document.getElementById('leadGold').innerText = stats.gold;
         });
     }
 
@@ -432,6 +607,10 @@
         allEvals.forEach(ev => {
             let match = false;
             if(type === 'exc' && ev.level === 'exc') match = true;
+            if(type === 'cre' && (ev.level === 'cre' || ev.level === 'creative')) match = true;
+            if(type === 'vg' && ev.level === 'vg') match = true;
+            if(type === 'fa' && ev.level === 'fa') match = true;
+            if(type === 'we' && (ev.level === 'we' || ev.level === 'weak')) match = true;
             if(type === ev.award) match = true;
             if(type === 'warning' && ev.warning) match = true;
 
