@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>بوابة ولي الأمر | Taalamna 🚀</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     
@@ -18,37 +18,118 @@
             --nafess-grad: linear-gradient(135deg, #1e1b4b, #312e81);
         }
 
-        body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg,#eef2ff,#dbeafe,#ede9fe); margin: 0; min-height: 100vh; padding: 10px; box-sizing: border-box; color: var(--dark); }
+        * { box-sizing: border-box; }
 
-        .login-box { background: rgba(255,255,255,0.2); backdrop-filter: blur(20px); padding: 40px; border-radius: 35px; border: 1px solid var(--border); box-shadow: 0 25px 50px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; margin: 10vh auto; }
-        .inp { width: 100%; padding: 14px; border-radius: 15px; border: none; font-family: 'Cairo'; font-weight: 700; outline: none; background: rgba(255,255,255,0.8); box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05); margin-bottom: 15px; }
-        .btn-action { width: 100%; padding: 15px; border-radius: 15px; border: none; background: linear-gradient(135deg,var(--primary),var(--secondary)); color: white; font-weight: 800; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background: linear-gradient(135deg,#eef2ff,#dbeafe,#ede9fe); 
+            margin: 0; 
+            min-height: 100vh; 
+            padding: 10px; 
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        .login-box { 
+            background: rgba(255,255,255,0.2); 
+            backdrop-filter: blur(20px); 
+            padding: 30px 20px; 
+            border-radius: 30px; 
+            border: 1px solid var(--border); 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.1); 
+            width: 100%; 
+            max-width: 400px; 
+            text-align: center; 
+            margin: 8vh auto; 
+        }
+
+        /* منع التكبير التلقائي في آيفون باستخدام font-size: 16px */
+        .inp { 
+            width: 100%; 
+            padding: 14px; 
+            border-radius: 15px; 
+            border: none; 
+            font-family: 'Cairo'; 
+            font-size: 16px; 
+            font-weight: 700; 
+            outline: none; 
+            background: rgba(255,255,255,0.8); 
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05); 
+            margin-bottom: 15px; 
+        }
+
+        .btn-action { 
+            width: 100%; 
+            padding: 14px; 
+            border-radius: 15px; 
+            border: none; 
+            background: linear-gradient(135deg,var(--primary),var(--secondary)); 
+            color: white; 
+            font-weight: 800; 
+            cursor: pointer; 
+            font-size: 15px; 
+            transition: 0.3s; 
+            min-height: 48px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         #reportDashboard { display: none; max-width: 900px; margin: auto; }
-        .navbar { background: rgba(255,255,255,0.55); backdrop-filter: blur(15px); padding: 20px; border-radius: 25px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; box-shadow: var(--shadow1); gap: 15px; flex-wrap: wrap; }
+        
+        .navbar { 
+            background: rgba(255,255,255,0.55); 
+            backdrop-filter: blur(15px); 
+            padding: 16px; 
+            border-radius: 25px; 
+            border: 1px solid var(--border); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px; 
+            box-shadow: var(--shadow1); 
+            gap: 15px; 
+            flex-wrap: wrap; 
+        }
 
         .rank-badge { background: #fef3c7; color: #b45309; padding: 4px 10px; border-radius: 10px; font-size: 12px; font-weight: 900; display: inline-flex; align-items: center; gap: 4px; border: 1px solid #fde68a; margin-top: 5px; }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
-        .stat-card { background: rgba(255,255,255,0.6); padding: 15px; border-radius: 20px; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow1); cursor: pointer; transition: 0.3s; }
-        .stat-card:hover { transform: translateY(-5px); background: #fff; }
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 10px; 
+            margin-bottom: 20px; 
+        }
+
+        .stat-card { 
+            background: rgba(255,255,255,0.6); 
+            padding: 12px 6px; 
+            border-radius: 18px; 
+            text-align: center; 
+            border: 1px solid var(--border); 
+            box-shadow: var(--shadow1); 
+            cursor: pointer; 
+            transition: 0.3s; 
+            user-select: none;
+        }
+        .stat-card:hover { transform: translateY(-3px); background: #fff; }
         .stat-card h4 { margin: 0; font-size: 11px; color: var(--text-muted); }
-        .stat-card p { margin: 5px 0 0; font-size: 22px; font-weight: 900; color: var(--primary); }
+        .stat-card p { margin: 4px 0 0; font-size: 20px; font-weight: 900; color: var(--primary); }
 
-        .report-item { background: rgba(255,255,255,0.7); border-radius: 20px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border); box-shadow: var(--shadow1); position: relative; overflow: hidden; }
+        .report-item { background: rgba(255,255,255,0.7); border-radius: 20px; padding: 16px; margin-bottom: 15px; border: 1px solid var(--border); box-shadow: var(--shadow1); position: relative; overflow: hidden; }
         .report-item::before { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 6px; background: var(--primary); }
-        .report-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-        .badge { padding: 5px 12px; border-radius: 10px; font-size: 11px; font-weight: 800; }
+        .report-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 10px; }
+        .badge { padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: 800; white-space: nowrap; }
         
-        .unit-badge { background: #e0e7ff; color: #4338ca; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; display: inline-block; margin-right: 5px; }
+        .unit-badge { background: #e0e7ff; color: #4338ca; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; display: inline-block; margin-top: 4px; }
 
-        .download-btn { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #2563eb, #3b82f6); color: white; text-decoration: none; padding: 10px 16px; border-radius: 12px; font-size: 12px; font-weight: 700; margin-top: 10px; transition: 0.2s; box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
+        .download-btn { display: inline-flex; align-items: center; justify-content: center; width: 100%; gap: 8px; background: linear-gradient(135deg, #2563eb, #3b82f6); color: white; text-decoration: none; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 700; margin-top: 10px; transition: 0.2s; box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
         .download-btn:active { transform: scale(0.97); }
 
-        .seen-status-container { background: #dcfce7; color: #166534; padding: 8px 15px; border-radius: 12px; font-size: 11px; font-weight: 700; display: inline-block; margin-top: 5px; border: 1px solid #bbf7d0; }
+        .seen-status-container { background: #dcfce7; color: #166534; padding: 6px 12px; border-radius: 12px; font-size: 11px; font-weight: 700; display: inline-block; margin-top: 5px; border: 1px solid #bbf7d0; }
 
-        #popup { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
-        .popup-box { background: white; padding: 30px; border-radius: 30px; width: 100%; max-width: 450px; max-height: 80vh; overflow-y: auto; }
+        #popup { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 15px; }
+        .popup-box { background: white; padding: 24px; border-radius: 25px; width: 100%; max-width: 450px; max-height: 85vh; overflow-y: auto; }
 
         .lvl-exc { background: var(--exc-bg); color: var(--exc-txt); }
         .lvl-cre { background: #e0e7ff; color: #3730a3; }
@@ -59,77 +140,80 @@
         .warning-badge { background: #fee2e2; color: #dc2626; padding: 2px 8px; border-radius: 6px; font-size: 10px; margin-right: 5px; }
         .award-text { color: #d97706; font-weight: 800; font-size: 13px; }
 
-        /* بوابة نافس  */
-        .nafess-container { background: var(--nafess-grad); color: white; border-radius: 25px; padding: 25px; margin-bottom: 20px; box-shadow: var(--shadow1); border: 1px solid rgba(255,255,255,0.1); }
-        .nafess-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
-        .nafess-badge { background: #f59e0b; color: #1e1b4b; font-size: 10px; font-weight: 900; padding: 3px 10px; border-radius: 8px; text-transform: uppercase; }
+        /* بوابة نافس */
+        .nafess-container { background: var(--nafess-grad); color: white; border-radius: 25px; padding: 18px; margin-bottom: 20px; box-shadow: var(--shadow1); border: 1px solid rgba(255,255,255,0.1); }
+        .nafess-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; }
+        .nafess-badge { background: #f59e0b; color: #1e1b4b; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 8px; text-transform: uppercase; }
         
-        .nafess-rewards-summary { background: rgba(255, 255, 255, 0.15); border-radius: 18px; padding: 15px; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(5px); }
+        .nafess-rewards-summary { background: rgba(255, 255, 255, 0.15); border-radius: 18px; padding: 12px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(5px); }
 
-        .current-units-box { background: rgba(255, 255, 255, 0.06); border-radius: 22px; padding: 18px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
-        .unit-card-item { background: rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 12px 15px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .current-units-box { background: rgba(255, 255, 255, 0.06); border-radius: 20px; padding: 14px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .unit-card-item { background: rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 10px 12px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
         .unit-card-item:last-child { margin-bottom: 0; }
         .unit-info-part { display: flex; flex-direction: column; gap: 2px; }
         .unit-subject-label { font-size: 11px; font-weight: 800; color: #a7f3d0; opacity: 0.9; }
-        .unit-name-text { font-size: 13px; font-weight: 700; color: #ffffff; }
-        .unit-reward-pill { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 4px 10px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+        .unit-name-text { font-size: 12px; font-weight: 700; color: #ffffff; }
+        .unit-reward-pill { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 4px 8px; font-size: 10px; font-weight: 800; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
         .unit-reward-pill.gold-target { color: #fef08a; background: rgba(245, 158, 11, 0.25); border-color: rgba(245, 158, 11, 0.4); }
         .unit-reward-pill.silver-target { color: #e2e8f0; background: rgba(148, 163, 184, 0.25); border-color: rgba(148, 163, 184, 0.4); }
 
-        .available-badges-container { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-        .avail-badge { background: rgba(245, 158, 11, 0.2); color: #fef08a; border: 1px solid rgba(245, 158, 11, 0.4); padding: 4px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+        .available-badges-container { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+        .avail-badge { background: rgba(245, 158, 11, 0.2); color: #fef08a; border: 1px solid rgba(245, 158, 11, 0.4); padding: 4px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
 
-        .leaderboard-box { background: rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 15px; margin-top: 15px; border: 1px solid rgba(255,255,255,0.1); }
-        .leaderboard-title { font-size: 14px; font-weight: 800; color: #fef08a; margin: 0 0 12px 0; display: flex; align-items: center; gap: 6px; }
-        .leaderboard-table { width: 100%; border-collapse: collapse; text-align: right; font-size: 13px; }
-        .leaderboard-table th { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.2); color: #a7f3d0; font-weight: 700; }
-        .leaderboard-table td { padding: 10px 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .leaderboard-box { background: rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 12px; margin-top: 15px; border: 1px solid rgba(255,255,255,0.1); overflow-x: auto; }
+        .leaderboard-title { font-size: 13px; font-weight: 800; color: #fef08a; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px; }
+        .leaderboard-table { width: 100%; border-collapse: collapse; text-align: right; font-size: 12px; min-width: 280px; }
+        .leaderboard-table th { padding: 6px; border-bottom: 1px solid rgba(255,255,255,0.2); color: #a7f3d0; font-weight: 700; }
+        .leaderboard-table td { padding: 8px 6px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .leaderboard-row-current { background: rgba(245, 158, 11, 0.25); border-radius: 10px; font-weight: bold; }
-        .rank-num { background: rgba(255,255,255,0.2); padding: 2px 7px; border-radius: 6px; font-weight: 900; font-size: 11px; }
+        .rank-num { background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 6px; font-weight: 900; font-size: 10px; }
         .rank-num.first { background: #f59e0b; color: #1e1b4b; }
 
-        .nafess-box { background: rgba(255,255,255,0.1); border-radius: 18px; padding: 15px; margin-top: 10px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
-        .btn-nafess-start { background: white; color: #1e1b4b; padding: 8px 18px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; font-size: 12px; transition: 0.2s; }
-        
-        .weeks-card { background: rgba(255,255,255,0.6); padding: 20px; border-radius: 25px; border: 1px solid var(--border); box-shadow: var(--shadow1); margin-top: 20px; }
-        .weeks-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; }
-        @media(min-width: 600px) { .weeks-grid { grid-template-columns: repeat(8, 1fr); } }
-        .week-item { padding: 10px; border-radius: 15px; text-align: center; font-size: 12px; font-weight: 700; background: white; border: 1px solid rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; }
-        .week-item.completed { background: #e2fbf0; color: #10b981; border-color: #a7f3d0; }
-        .week-item.current { background: var(--primary); color: white; border-color: var(--primary); transform: scale(1.05); }
+        .nafess-box { background: rgba(255,255,255,0.1); border-radius: 18px; padding: 14px; margin-top: 10px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .btn-nafess-start { background: white; color: #1e1b4b; padding: 10px 16px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; font-size: 12px; transition: 0.2s; width: 100%; text-align: center; }
 
-        /* أنماط بطاقة الترتيب المحدثة وشريط الطاقة */
+        .weeks-card { background: rgba(255,255,255,0.6); padding: 16px; border-radius: 20px; border: 1px solid var(--border); box-shadow: var(--shadow1); margin-top: 20px; }
+        .weeks-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+        
+        .week-item { padding: 8px 4px; border-radius: 12px; text-align: center; font-size: 11px; font-weight: 700; background: white; border: 1px solid rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; }
+        .week-item.completed { background: #e2fbf0; color: #10b981; border-color: #a7f3d0; }
+        .week-item.current { background: var(--primary); color: white; border-color: var(--primary); transform: scale(1.02); }
+
+        /* بطاقة الترتيب المحدثة وشريط الطاقة للجوال */
         .rank-card-compact {
             background: rgba(255, 255, 255, 0.85);
             border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 12px 18px;
-            display: inline-flex;
+            border-radius: 16px;
+            padding: 8px 12px;
+            display: flex;
             align-items: center;
-            gap: 15px;
+            justify-content: space-between;
+            gap: 10px;
             box-shadow: var(--shadow1);
             margin-top: 8px;
+            width: 100%;
         }
         .rank-card-compact .rank-num-box {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             font-weight: 900;
-            font-size: 16px;
-            padding: 6px 14px;
-            border-radius: 12px;
+            font-size: 13px;
+            padding: 4px 10px;
+            border-radius: 10px;
+            white-space: nowrap;
         }
         .rank-card-compact .diff-box {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
             color: var(--dark);
         }
 
         .energy-bar-wrapper {
             width: 100%;
-            min-width: 120px;
+            min-width: 80px;
             background: rgba(0, 0, 0, 0.08);
             border-radius: 20px;
-            height: 16px;
+            height: 14px;
             position: relative;
             overflow: hidden;
             border: 1px solid rgba(0, 0, 0, 0.05);
@@ -146,18 +230,30 @@
             position: absolute;
             width: 100%;
             text-align: center;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 900;
             color: #1e293b;
             text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+        }
+
+        /* تحسين التجاوب مع الشاشات المتنوعة */
+        @media(min-width: 600px) {
+            body { padding: 20px; }
+            .navbar { flex-wrap: nowrap; padding: 20px; }
+            .stats-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
+            .stat-card p { font-size: 22px; }
+            .weeks-grid { grid-template-columns: repeat(8, 1fr); }
+            .btn-nafess-start { width: auto; }
+            .rank-card-compact { display: inline-flex; width: auto; justify-content: flex-start; }
+            .download-btn { width: auto; }
         }
     </style>
 </head>
 <body>
 
 <div id="loginArea" class="login-box">
-    <div style="background: var(--primary); color: white; width: 50px; height: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 24px; margin: 0 auto 20px;">أ</div>
-    <h2>بوابة ولي الأمر</h2>
+    <div style="background: var(--primary); color: white; width: 50px; height: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 24px; margin: 0 auto 15px;">أ</div>
+    <h2 style="font-size: 20px; margin-bottom: 20px;">بوابة ولي الأمر</h2>
     <input type="text" id="userInput" class="inp" placeholder="اسم المستخدم">
     <button class="btn-action" onclick="login()">دخول للاطلاع 🔓</button>
     <p id="errorMsg" style="color:red; font-size:12px; margin-top:15px; display:none; font-weight:bold;">بيانات الدخول غير صحيحة!</p>
@@ -165,16 +261,16 @@
 
 <div id="reportDashboard">
     <nav class="navbar">
-        <div>
-            <h3 id="stdName" style="margin:0; font-size:18px;">اسم الطالب</h3>
+        <div style="width: 100%;">
+            <h3 id="stdName" style="margin:0; font-size:17px;">اسم الطالب</h3>
             <small id="stdClass" style="color:var(--text-muted); display:block; font-weight: 700; margin-top:2px;">الفصل: --</small>
             <div id="stdRank" class="rank-badge">🏆 جاري حساب الترتيب الفعلي...</div>
             <div id="attendanceBadge"></div>
             <div id="seenBadgeLocation" style="margin-top: 5px;"></div>
         </div>
-        <div style="display: flex; gap: 8px;">
-            <button id="toggleNafessBtn" class="btn-action" style="width:auto; padding:8px 16px; font-size:12px; background: linear-gradient(135deg, #f59e0b, #ea580c); display: none;" onclick="toggleNafessView()">🎯 بوابة نافس المحاكية</button>
-            <button class="btn-action" style="width:auto; padding:8px 16px; font-size:12px; background:var(--dark)" onclick="location.reload()">خروج</button>
+        <div style="display: flex; gap: 8px; width: 100%; justify-content: space-between;">
+            <button id="toggleNafessBtn" class="btn-action" style="flex: 1; padding:8px 12px; font-size:11px; background: linear-gradient(135deg, #f59e0b, #ea580c); display: none;" onclick="toggleNafessView()">🎯 بوابة نافس المحاكية</button>
+            <button class="btn-action" style="width:auto; padding:8px 16px; font-size:11px; background:var(--dark)" onclick="location.reload()">خروج</button>
         </div>
     </nav>
 
@@ -183,20 +279,20 @@
             <div class="nafess-header">
                 <div>
                     <span class="nafess-badge">بوابة التميز المهارية</span>
-                    <h3 style="margin: 5px 0 0 0; font-size: 18px;">🎯 ميداليات وأوسمة المنافسة المدرسية</h3>
+                    <h3 style="margin: 5px 0 0 0; font-size: 16px;">🎯 ميداليات وأوسمة المنافسة المدرسية</h3>
                 </div>
             </div>
             
             <div class="nafess-rewards-summary">
-                <span style="font-size: 28px;">🥇</span>
+                <span style="font-size: 24px;">🥇</span>
                 <div>
-                    <strong style="display: block; font-size: 14px;">رصيد الميداليات الذهبية الحالي:</strong>
-                    <span style="font-size: 12px; opacity: 0.95;">تم الحصول على   <b id="nafessGoldCount" style="font-size: 16px; color: #f59e0b;">0</b> ميدالية ذهبية من الدروس الحالية!</span>
+                    <strong style="display: block; font-size: 13px;">رصيد الميداليات الذهبية الحالي:</strong>
+                    <span style="font-size: 11px; opacity: 0.95;">تم الحصول على <b id="nafessGoldCount" style="font-size: 15px; color: #f59e0b;">0</b> ميدالية ذهبية من الدروس الحالية!</span>
                 </div>
             </div>
 
             <div class="current-units-box">
-                <h4 style="margin: 0 0 12px 0; font-size: 13px; color: #fef08a; display: flex; align-items: center; gap: 6px;">📖 وحدات الأسبوع الحالي والمهارات المستهدفة بمكافأة :</h4>
+                <h4 style="margin: 0 0 10px 0; font-size: 12px; color: #fef08a; display: flex; align-items: center; gap: 6px;">📖 وحدات الأسبوع الحالي والمهارات المستهدفة بمكافأة :</h4>
                 <div id="unitsListContainer">
                     <div class="unit-card-item">
                         <div class="unit-info-part">
@@ -221,7 +317,7 @@
                     </div>
                 </div>
 
-                <h4 style="margin: 15px 0 6px 0; font-size: 12px; color: #a7f3d0;">🏅 الأوسمة المتاحة  هذا الأسبوع:</h4>
+                <h4 style="margin: 12px 0 6px 0; font-size: 11px; color: #a7f3d0;">🏅 الأوسمة المتاحة هذا الأسبوع:</h4>
                 <div class="available-badges-container">
                     <span class="avail-badge">⚡ وسام الطالب الموهوب</span>
                     <span class="avail-badge">🧬 وسام العبقري الصغير</span>
@@ -241,23 +337,22 @@
                         </tr>
                     </thead>
                     <tbody id="leaderboardBody">
-                        <!-- سيتم توليد لوحة الشرف تلقائياً هنا -->
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
             
             <div class="nafess-box">
                 <div>
-                    <span style="font-size: 11px; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 6px;">مادة: الرياضيات</span>
-                    <h4 style="margin: 5px 0 0 0; font-size: 14px;">الاختبار التجريبي لمحاكاة نافس - الأعداد والعمليات</h4>
+                    <span style="font-size: 10px; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 6px;">مادة: الرياضيات</span>
+                    <h4 style="margin: 4px 0 0 0; font-size: 13px;">الاختبار التجريبي لمحاكاة نافس - الأعداد والعمليات</h4>
                 </div>
                 <button class="btn-nafess-start" onclick="alert('جاري الانتقال لبيئة الاختبار المحاكي...')">ابدأ الاختبار الآن</button>
             </div>
         </div>
 
         <div class="weeks-card">
-            <h4 style="margin:0; font-size:15px;">📅 خطة التوزيع المهارى والزمني للاختبارات</h4>
-            <small style="color:var(--text-muted)">تابع الأسابيع المنجزة للاستعداد للاختبار أولاً بأول</small>
+            <h4 style="margin:0; font-size:14px;">📅 خطة التوزيع المهارى والزمني للاختبارات</h4>
+            <small style="color:var(--text-muted); font-size:11px;">تابع الأسابيع المنجزة للاستعداد للاختبار أولاً بأول</small>
             <div class="weeks-grid" id="weeksContainer"></div>
         </div>
     </div>
@@ -281,7 +376,7 @@
 
 <div id="popup">
     <div class="popup-box">
-        <h3 id="popupTitle">التفاصيل</h3>
+        <h3 id="popupTitle" style="margin-top:0; font-size:16px;">التفاصيل</h3>
         <div id="popupContent"></div>
         <button class="btn-action" style="margin-top:20px" onclick="closePopup()">إغلاق</button>
     </div>
@@ -568,20 +663,20 @@
                         <div class="report-header">
                             <div>
                                 <small style="color:var(--text-muted)">${ev.date} | ${ev.time || ''}</small>
-                                <div style="font-weight:900; font-size:16px; margin-top:5px; display:flex; align-items:center; gap:5px; flex-wrap:wrap;">
+                                <div style="font-weight:900; font-size:15px; margin-top:5px; display:flex; align-items:center; gap:5px; flex-wrap:wrap;">
                                     <span>مادة: ${ev.subject}</span> ${unitLessonHtml}
                                 </div>
                             </div>
                             <span class="badge lvl-${ev.level}">${levelNames[ev.level] || 'تم الرصد'}</span>
                         </div>
-                        <div style="margin: 10px 0;">
+                        <div style="margin: 8px 0;">
                             ${ev.award ? `<span class="award-text">🏆 ${awardNames[ev.award]}</span>` : ''}
                             ${ev.warning ? `<span class="warning-badge">${warnNames[ev.warning]}</span>` : ''}
                         </div>
-                        <div style="font-size:13px; margin-bottom:10px">
+                        <div style="font-size:12px; margin-bottom:8px">
                             <span>الواجب:</span> <strong style="color:var(--primary)">${ev.homework || 'لا يوجد'}</strong>
                         </div>
-                        <div style="background:#fff; padding:10px; border-radius:12px; font-size:13px; border:1px solid #eee">
+                        <div style="background:#fff; padding:10px; border-radius:12px; font-size:12px; border:1px solid #eee">
                             💬 ${ev.message || 'لا توجد ملاحظات إضافية'}
                         </div>
                         ${fileBtnHtml}
