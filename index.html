@@ -43,74 +43,38 @@
             margin: 8vh auto; 
         }
 
-        /* منع التكبير التلقائي في آيفون باستخدام font-size: 16px */
         .inp { 
-            width: 100%; 
-            padding: 14px; 
-            border-radius: 15px; 
-            border: none; 
-            font-family: 'Cairo'; 
-            font-size: 16px; 
-            font-weight: 700; 
-            outline: none; 
-            background: rgba(255,255,255,0.8); 
-            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05); 
+            width: 100%; padding: 14px; border-radius: 15px; border: none; 
+            font-family: 'Cairo'; font-size: 16px; font-weight: 700; outline: none; 
+            background: rgba(255,255,255,0.8); box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05); 
             margin-bottom: 15px; 
         }
 
         .btn-action { 
-            width: 100%; 
-            padding: 14px; 
-            border-radius: 15px; 
-            border: none; 
+            width: 100%; padding: 14px; border-radius: 15px; border: none; 
             background: linear-gradient(135deg,var(--primary),var(--secondary)); 
-            color: white; 
-            font-weight: 800; 
-            cursor: pointer; 
-            font-size: 15px; 
-            transition: 0.3s; 
-            min-height: 48px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            color: white; font-weight: 800; cursor: pointer; font-size: 15px; 
+            transition: 0.3s; min-height: 48px; display: inline-flex; 
+            align-items: center; justify-content: center;
         }
 
         #reportDashboard { display: none; max-width: 900px; margin: auto; }
         
         .navbar { 
-            background: rgba(255,255,255,0.55); 
-            backdrop-filter: blur(15px); 
-            padding: 16px; 
-            border-radius: 25px; 
-            border: 1px solid var(--border); 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 15px; 
-            box-shadow: var(--shadow1); 
-            gap: 15px; 
-            flex-wrap: wrap; 
+            background: rgba(255,255,255,0.55); backdrop-filter: blur(15px); 
+            padding: 16px; border-radius: 25px; border: 1px solid var(--border); 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 15px; box-shadow: var(--shadow1); gap: 15px; flex-wrap: wrap; 
         }
 
         .rank-badge { background: #fef3c7; color: #b45309; padding: 4px 10px; border-radius: 10px; font-size: 12px; font-weight: 900; display: inline-flex; align-items: center; gap: 4px; border: 1px solid #fde68a; margin-top: 5px; }
 
-        .stats-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 10px; 
-            margin-bottom: 20px; 
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
 
         .stat-card { 
-            background: rgba(255,255,255,0.6); 
-            padding: 12px 6px; 
-            border-radius: 18px; 
-            text-align: center; 
-            border: 1px solid var(--border); 
-            box-shadow: var(--shadow1); 
-            cursor: pointer; 
-            transition: 0.3s; 
-            user-select: none;
+            background: rgba(255,255,255,0.6); padding: 12px 6px; border-radius: 18px; 
+            text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow1); 
+            cursor: pointer; transition: 0.3s; user-select: none;
         }
         .stat-card:hover { transform: translateY(-3px); background: #fff; }
         .stat-card h4 { margin: 0; font-size: 11px; color: var(--text-muted); }
@@ -119,12 +83,15 @@
         .report-item { background: rgba(255,255,255,0.7); border-radius: 20px; padding: 16px; margin-bottom: 15px; border: 1px solid var(--border); box-shadow: var(--shadow1); position: relative; overflow: hidden; }
         .report-item::before { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 6px; background: var(--primary); }
         .report-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 10px; }
-        .badge { padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: 800; white-space: nowrap; }
         
+        .badge { padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: 800; white-space: nowrap; }
         .unit-badge { background: #e0e7ff; color: #4338ca; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; display: inline-block; margin-top: 4px; }
-
         .download-btn { display: inline-flex; align-items: center; justify-content: center; width: 100%; gap: 8px; background: linear-gradient(135deg, #2563eb, #3b82f6); color: white; text-decoration: none; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 700; margin-top: 10px; transition: 0.2s; box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
-        .download-btn:active { transform: scale(0.97); }
+        
+        /* إعدادات حالة الواجب للقراءة فقط */
+        .hw-btn { padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 900; border: none; display: inline-flex; align-items: center; gap: 5px; }
+        .hw-pending { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
+        .hw-done { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
 
         .seen-status-container { background: #dcfce7; color: #166534; padding: 6px 12px; border-radius: 12px; font-size: 11px; font-weight: 700; display: inline-block; margin-top: 5px; border: 1px solid #bbf7d0; }
 
@@ -140,7 +107,6 @@
         .warning-badge { background: #fee2e2; color: #dc2626; padding: 2px 8px; border-radius: 6px; font-size: 10px; margin-right: 5px; }
         .award-text { color: #d97706; font-weight: 800; font-size: 13px; }
 
-        /* بوابة نافس */
         .nafess-container { background: var(--nafess-grad); color: white; border-radius: 25px; padding: 18px; margin-bottom: 20px; box-shadow: var(--shadow1); border: 1px solid rgba(255,255,255,0.1); }
         .nafess-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; }
         .nafess-badge { background: #f59e0b; color: #1e1b4b; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 8px; text-transform: uppercase; }
@@ -149,7 +115,6 @@
 
         .current-units-box { background: rgba(255, 255, 255, 0.06); border-radius: 20px; padding: 14px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
         .unit-card-item { background: rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 10px 12px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .unit-card-item:last-child { margin-bottom: 0; }
         .unit-info-part { display: flex; flex-direction: column; gap: 2px; }
         .unit-subject-label { font-size: 11px; font-weight: 800; color: #a7f3d0; opacity: 0.9; }
         .unit-name-text { font-size: 12px; font-weight: 700; color: #ffffff; }
@@ -179,64 +144,14 @@
         .week-item.completed { background: #e2fbf0; color: #10b981; border-color: #a7f3d0; }
         .week-item.current { background: var(--primary); color: white; border-color: var(--primary); transform: scale(1.02); }
 
-        /* بطاقة الترتيب المحدثة وشريط الطاقة للجوال */
-        .rank-card-compact {
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 8px 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            box-shadow: var(--shadow1);
-            margin-top: 8px;
-            width: 100%;
-        }
-        .rank-card-compact .rank-num-box {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            font-weight: 900;
-            font-size: 13px;
-            padding: 4px 10px;
-            border-radius: 10px;
-            white-space: nowrap;
-        }
-        .rank-card-compact .diff-box {
-            font-size: 11px;
-            font-weight: 800;
-            color: var(--dark);
-        }
+        .rank-card-compact { background: rgba(255, 255, 255, 0.85); border: 1px solid var(--border); border-radius: 16px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: var(--shadow1); margin-top: 8px; width: 100%; }
+        .rank-card-compact .rank-num-box { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; font-weight: 900; font-size: 13px; padding: 4px 10px; border-radius: 10px; white-space: nowrap; }
+        .rank-card-compact .diff-box { font-size: 11px; font-weight: 800; color: var(--dark); }
 
-        .energy-bar-wrapper {
-            width: 100%;
-            min-width: 80px;
-            background: rgba(0, 0, 0, 0.08);
-            border-radius: 20px;
-            height: 14px;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            display: flex;
-            align-items: center;
-        }
-        .energy-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #10b981 100%);
-            border-radius: 20px;
-            transition: width 0.6s ease-in-out;
-        }
-        .energy-bar-text {
-            position: absolute;
-            width: 100%;
-            text-align: center;
-            font-size: 9px;
-            font-weight: 900;
-            color: #1e293b;
-            text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
-        }
+        .energy-bar-wrapper { width: 100%; min-width: 80px; background: rgba(0, 0, 0, 0.08); border-radius: 20px; height: 14px; position: relative; overflow: hidden; border: 1px solid rgba(0, 0, 0, 0.05); display: flex; align-items: center; }
+        .energy-bar-fill { height: 100%; background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #10b981 100%); border-radius: 20px; transition: width 0.6s ease-in-out; }
+        .energy-bar-text { position: absolute; width: 100%; text-align: center; font-size: 9px; font-weight: 900; color: #1e293b; text-shadow: 0 0 3px rgba(255, 255, 255, 0.8); }
 
-        /* تحسين التجاوب مع الشاشات المتنوعة */
         @media(min-width: 600px) {
             body { padding: 20px; }
             .navbar { flex-wrap: nowrap; padding: 20px; }
@@ -370,7 +285,13 @@
             <div class="stat-card" onclick="showDetails('warning')"><h4>انذارات ⚠️</h4><p id="stat-warn">0</p></div>
         </div>
 
+        <div id="reportsTabs" style="display:flex; gap:10px; margin-bottom:15px;">
+            <button class="btn-action" id="tabCurrent" onclick="switchTab('current')" style="flex:1;">المهام والتقارير الحالية</button>
+            <button class="btn-action" id="tabCompleted" onclick="switchTab('completed')" style="flex:1; background:var(--dark); color:white;">سجل الواجبات المكتملة 📁</button>
+        </div>
+
         <div id="reportsList"></div>
+        <div id="completedHwList" style="display:none;"></div>
     </div>
 </div>
 
@@ -396,7 +317,6 @@
     const warnNames = { 'yellow': 'انذار أول 🟨', 'red': 'انذار أخير 🟥', 'warning': 'خصم درجة 📌' };
     const awardNames = { 'gold': 'الميدالية الذهبية 🥇', 'silver': 'الميدالية الفضية 🥈', 'bronze': 'الميدالية البرونزية 🥉' };
 
-    // أوزان التقييمات لحساب الترتيب الفعلي
     const EVAL_WEIGHTS = {
         'exc': 2, 'cre': 4, 'creative': 4, 'vg': 1, 'fa': 0, 'we': -2, 'weak': -2,
         'gold': 5, 'silver': 3, 'bronze': 1, 'warn': -3
@@ -439,13 +359,7 @@
             const diffToNext = nextStudent ? (st.points - nextStudent.points) : 0;
             const energyPct = Math.min(100, Math.max(5, (st.points / maxPointsInClass) * 100));
 
-            return {
-                ...st,
-                actualRank: idx + 1,
-                diffToNext: diffToNext,
-                hasNextStudent: !!nextStudent,
-                energyPct: energyPct
-            };
+            return { ...st, actualRank: idx + 1, diffToNext: diffToNext, hasNextStudent: !!nextStudent, energyPct: energyPct };
         });
     }
 
@@ -458,11 +372,7 @@
             
             for(let k in data) {
                 if(data[k].studentUser === u) {
-                    found = data[k]; 
-                    sK = k; 
-                    cl = data[k].className;
-                    sId = data[k].schoolId;
-                    break;
+                    found = data[k]; sK = k; cl = data[k].className; sId = data[k].schoolId; break;
                 }
             }
             
@@ -507,15 +417,26 @@
     function buildWeeksGrid(currentWeek) {
         const container = document.getElementById('weeksContainer');
         container.innerHTML = '';
-
         for (let i = 1; i <= 16; i++) {
             let statusClass = "";
             let text = "أسبوع " + i;
-            
             if (i < currentWeek) { statusClass = "completed"; text = i + " ✓"; } 
             else if (i === currentWeek) { statusClass = "current"; }
-
             container.innerHTML += `<div class="week-item ${statusClass}">${text}</div>`;
+        }
+    }
+
+    function switchTab(tab) {
+        if(tab === 'current') {
+            document.getElementById('reportsList').style.display = 'block';
+            document.getElementById('completedHwList').style.display = 'none';
+            document.getElementById('tabCurrent').style.background = 'linear-gradient(135deg,var(--primary),var(--secondary))';
+            document.getElementById('tabCompleted').style.background = 'var(--dark)';
+        } else {
+            document.getElementById('reportsList').style.display = 'none';
+            document.getElementById('completedHwList').style.display = 'block';
+            document.getElementById('tabCompleted').style.background = 'linear-gradient(135deg,var(--primary),var(--secondary))';
+            document.getElementById('tabCurrent').style.background = 'var(--dark)';
         }
     }
 
@@ -527,14 +448,11 @@
         document.getElementById('stdClass').innerText = `المدرسة: ${schoolName} | الفصل: ${cls}`;
         document.getElementById('seenBadgeLocation').innerHTML = `<div class="seen-status-container">✓ تم تأكيد اطلاعك على التقارير للإدارة</div>`;
 
-        // حساب الترتيب الفعلي للفصل وشريط الطاقة
         database.ref('students').once('value', stdSnap => {
             const allStds = stdSnap.val() || {};
             let classStudents = [];
             for(let k in allStds) {
-                if(allStds[k].className === cls) {
-                    classStudents.push({ key: k, ...allStds[k], name: allStds[k].studentName });
-                }
+                if(allStds[k].className === cls) { classStudents.push({ key: k, ...allStds[k], name: allStds[k].studentName }); }
             }
 
             database.ref('evaluations/'+cls).on('value', evSnap => {
@@ -543,7 +461,6 @@
                 const myData = rankedList.find(s => s.key === sKey);
 
                 if(myData) {
-                    // 1. تحديث بطاقة الترتيب المخصصة
                     const diffText = myData.hasNextStudent ? `الفرق عن التالي: +${myData.diffToNext} نقطة` : `المركز الأخير بالفصل`;
                     document.getElementById('stdRank').outerHTML = `
                         <div id="stdRank" class="rank-card-compact">
@@ -552,11 +469,9 @@
                         </div>
                     `;
 
-                    // 2. تحديث لوحة الشرف بشريط الطاقة
                     const leadBody = document.getElementById('leaderboardBody');
                     leadBody.innerHTML = '';
                     
-                    // إضافة أول 3 طلاب
                     rankedList.slice(0, 3).forEach((st, idx) => {
                         let tr = document.createElement('tr');
                         if(st.key === sKey) tr.className = 'leaderboard-row-current';
@@ -575,7 +490,6 @@
                         leadBody.appendChild(tr);
                     });
 
-                    // إضافة صف الطالب الحالي في الأسفل إذا لم يكن ضمن الأوائل
                     if(myData.actualRank > 3) {
                         let myTr = document.createElement('tr');
                         myTr.className = 'leaderboard-row-current';
@@ -596,7 +510,6 @@
             });
         });
 
-        // قراءة حالة الحضور
         database.ref(`attendance/${cls}`).on('value', snap => {
             const attData = snap.val();
             let attHtml = "";
@@ -606,8 +519,7 @@
                 const studentAtt = attData[lastDate][sKey];
                 
                 if(studentAtt) {
-                    let statusTxt = 'حاضر ✅';
-                    let bg = '#dcfce7', c = '#166534', br = '#bbf7d0';
+                    let statusTxt = 'حاضر ✅'; let bg = '#dcfce7', c = '#166534', br = '#bbf7d0';
                     if(studentAtt.status === 'absent') { statusTxt = 'غائب ❌'; bg = '#fee2e2'; c = '#991b1b'; br = '#fecaca'; }
                     if(studentAtt.status === 'late') { statusTxt = 'متأخر ⚠️'; bg = '#fef3c7'; c = '#92400e'; br = '#fde68a'; }
                     attHtml = `<div style="background: ${bg}; color: ${c}; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; border: 1px solid ${br}; display: inline-block; margin-top: 8px;">سجل الحضور (${lastDate}): ${statusTxt}</div>`;
@@ -616,7 +528,6 @@
             document.getElementById('attendanceBadge').innerHTML = attHtml;
         });
 
-        // قراءة إعدادات بوابة نافس
         database.ref('schoolSettings/nafess').on('value', snap => {
             const data = snap.val();
             const nafessBtn = document.getElementById('toggleNafessBtn');
@@ -626,25 +537,36 @@
                 if (data.isActive === false) {
                     nafessBtn.style.display = 'none';
                     if (isNafessActive) toggleNafessView();
-                } else {
-                    nafessBtn.style.display = 'inline-flex';
-                }
+                } else { nafessBtn.style.display = 'inline-flex'; }
             } else { nafessBtn.style.display = 'inline-flex'; }
             buildWeeksGrid(week);
         });
 
-        // قراءة سجلات التقارير اليومية وتحديث الإحصائيات (متضمنة مبدع وضعيف)
         database.ref('evaluations/'+cls+'/'+sKey).on('value', snap => {
             const data = snap.val();
             const list = document.getElementById('reportsList');
-            list.innerHTML = "";
-            if(!data) { list.innerHTML = "<div style='text-align:center; padding:50px'>لا توجد سجلات تقارير حالية</div>"; return; }
+            const compList = document.getElementById('completedHwList');
+            list.innerHTML = ""; compList.innerHTML = "";
             
-            allEvals = Object.values(data).reverse();
+            if(!data) { 
+                list.innerHTML = "<div style='text-align:center; padding:50px'>لا توجد سجلات تقارير حالية</div>"; 
+                compList.innerHTML = "<div style='text-align:center; padding:50px'>لا يوجد سجل واجبات مكتملة</div>";
+                return; 
+            }
+            
+            allEvals = Object.entries(data).map(([k, v]) => ({ id: k, ...v })).reverse();
+            
             let stats = { exc:0, cre:0, vg:0, fa:0, we:0, gold:0, silver:0, bronze:0, warn:0 };
+            
+            let updates = {};
+            let hasUnseen = false;
 
-            list.innerHTML = "";
             allEvals.forEach(ev => {
+                if(!ev.seenByParent) {
+                    updates[ev.id + '/seenByParent'] = true;
+                    hasUnseen = true;
+                }
+
                 if(ev.level === 'exc') stats.exc++;
                 if(ev.level === 'cre' || ev.level === 'creative') stats.cre++;
                 if(ev.level === 'vg') stats.vg++;
@@ -655,16 +577,27 @@
                 if(ev.award === 'bronze') stats.bronze++;
                 if(ev.warning) stats.warn++;
 
-                let fileBtnHtml = ev.worksheet ? `<div style="margin-top:10px;"><a href="${ev.worksheet}" download="ورقة_عمل_${ev.subject || 'درس'}.png" class="download-btn">📥 تحميل ورقة العمل المرفقة</a></div>` : "";
+                let fileBtnHtml = ev.worksheet ? `<div style="margin-top:10px;"><a href="${ev.worksheet}" download="ورقة_عمل.png" class="download-btn">📥 تحميل ورقة العمل المرفقة</a></div>` : "";
                 let unitLessonHtml = ev.unitLesson ? `<span class="unit-badge">📖 ${ev.unitLesson}</span>` : `<span class="unit-badge">📖 وحدة الدرس الحالية</span>`;
 
-                list.innerHTML += `
+                let currentHwStatus = ev.hwStatus || 'pending';
+                let hwBtnHtml = "";
+                
+                // إظهار حالة الواجب فقط إذا تم اعتمادها/تصحيحها من المعلم
+                if(ev.hwCorrected) {
+                    let hwBtnClass = currentHwStatus === 'done' ? 'hw-done' : 'hw-pending';
+                    let hwBtnText = currentHwStatus === 'done' ? '✅ تم الحل' : '❌ لم يحل الواجب';
+                    hwBtnHtml = `<span class="hw-btn ${hwBtnClass}">${hwBtnText}</span>`;
+                }
+
+                let itemHtml = `
                     <div class="report-item">
                         <div class="report-header">
                             <div>
                                 <small style="color:var(--text-muted)">${ev.date} | ${ev.time || ''}</small>
                                 <div style="font-weight:900; font-size:15px; margin-top:5px; display:flex; align-items:center; gap:5px; flex-wrap:wrap;">
                                     <span>مادة: ${ev.subject}</span> ${unitLessonHtml}
+                                    ${ev.hwCorrected ? `<span class="unit-badge" style="background:#10b981; color:white;">✔️ تم الاعتماد</span>` : ''}
                                 </div>
                             </div>
                             <span class="badge lvl-${ev.level}">${levelNames[ev.level] || 'تم الرصد'}</span>
@@ -673,8 +606,9 @@
                             ${ev.award ? `<span class="award-text">🏆 ${awardNames[ev.award]}</span>` : ''}
                             ${ev.warning ? `<span class="warning-badge">${warnNames[ev.warning]}</span>` : ''}
                         </div>
-                        <div style="font-size:12px; margin-bottom:8px">
-                            <span>الواجب:</span> <strong style="color:var(--primary)">${ev.homework || 'لا يوجد'}</strong>
+                        <div style="font-size:12px; margin-bottom:12px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                            <span>الواجب المطلوب:</span> <strong style="color:var(--primary)">${ev.homework || 'لا يوجد'}</strong>
+                            ${hwBtnHtml}
                         </div>
                         <div style="background:#fff; padding:10px; border-radius:12px; font-size:12px; border:1px solid #eee">
                             💬 ${ev.message || 'لا توجد ملاحظات إضافية'}
@@ -682,7 +616,18 @@
                         ${fileBtnHtml}
                     </div>
                 `;
+
+                // في حال تم الحل، ينتقل التقييم إلى سجل الواجبات المكتملة
+                if(currentHwStatus === 'done') {
+                    compList.innerHTML += itemHtml;
+                } else {
+                    list.innerHTML += itemHtml;
+                }
             });
+
+            if(hasUnseen) {
+                database.ref('evaluations/'+cls+'/'+sKey).update(updates);
+            }
 
             document.getElementById('stat-exc').innerText = stats.exc;
             document.getElementById('stat-cre').innerText = stats.cre;
