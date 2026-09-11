@@ -475,14 +475,16 @@
         document.getElementById('stdClass').innerText = `المدرسة: ${schoolName} | الفصل: ${cls}`;
         document.getElementById('seenBadgeLocation').innerHTML = `<div class="seen-status-container">✓ تم تأكيد اطلاعك على التقارير للإدارة</div>`;
 
-        database.ref('students').once('value', stdSnap => {
-            const allStds = stdSnap.val() || {};
+        // التعديل الأول: جلب طلاب الفصل الحالي فقط بدلاً من كل طلاب المدارس
+        database.ref('students').orderByChild('className').equalTo(cls).once('value', stdSnap => {
+            const classStds = stdSnap.val() || {};
             let classStudents = [];
-            for(let k in allStds) {
-                if(allStds[k].className === cls) { classStudents.push({ key: k, ...allStds[k], name: allStds[k].studentName }); }
+            for(let k in classStds) {
+                classStudents.push({ key: k, ...classStds[k], name: classStds[k].studentName });
             }
 
-            database.ref('evaluations/'+cls).on('value', evSnap => {
+            // التعديل الثاني: استدعاء التقييمات لمرة واحدة لمعرفة الترتيب فقط وعدم الاستماع المستمر لكل التغييرات
+            database.ref('evaluations/'+cls).once('value', evSnap => {
                 const evalsData = evSnap.val() || {};
                 const rankedList = processClassRankings(classStudents, evalsData);
                 const myData = rankedList.find(s => s.key === sKey);
@@ -569,6 +571,9 @@
             buildWeeksGrid(week);
         });
 
+        // التعديل الثالث: متغير للتحكم بإرسال التحديث مرة واحدة فقط
+        let isSeenUpdated = false;
+
         database.ref('evaluations/'+cls+'/'+sKey).on('value', snap => {
             const data = snap.val();
             const list = document.getElementById('reportsList');
@@ -592,7 +597,8 @@
             let hasUnseen = false;
 
             allEvals.forEach(ev => {
-                if(!ev.seenByParent) {
+                // التحقق من المتغير isSeenUpdated قبل الإضافة لقائمة التحديثات
+                if(!ev.seenByParent && !isSeenUpdated) {
                     updates[ev.id + '/seenByParent'] = true;
                     hasUnseen = true;
                 }
@@ -662,8 +668,10 @@
                 }
             });
 
-            if(hasUnseen) {
+            // إرسال التحديث لمرة واحدة فقط وتغيير حالة المتغير
+            if(hasUnseen && !isSeenUpdated) {
                 database.ref('evaluations/'+cls+'/'+sKey).update(updates);
+                isSeenUpdated = true; // نمنع تكرار إرسال التحديث مستقبلاً
             }
 
             updateHwEnergyUI(hwStats);
