@@ -152,6 +152,18 @@
         .energy-bar-fill { height: 100%; background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #10b981 100%); border-radius: 20px; transition: width 0.6s ease-in-out; }
         .energy-bar-text { position: absolute; width: 100%; text-align: center; font-size: 9px; font-weight: 900; color: #1e293b; text-shadow: 0 0 3px rgba(255, 255, 255, 0.8); }
 
+        /* تنسيقات مؤشر طاقة الواجبات الجديد */
+        .hw-energy-card {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border-radius: 20px; padding: 16px; margin-bottom: 15px; 
+            border: 1px solid var(--border); box-shadow: var(--shadow1); 
+            border-right: 6px solid var(--primary);
+        }
+        .hw-energy-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .hw-energy-title h4 { margin: 0; font-size: 14px; color: var(--dark); display: flex; align-items: center; gap: 6px; }
+        .hw-energy-pct { font-weight: 900; color: var(--primary); font-size: 18px; }
+        .hw-energy-details { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; font-weight: 700; color: var(--text-muted); flex-wrap: wrap; gap: 5px;}
+
         @media(min-width: 600px) {
             body { padding: 20px; }
             .navbar { flex-wrap: nowrap; padding: 20px; }
@@ -273,6 +285,23 @@
     </div>
 
     <div id="reportsView">
+        
+        <!-- مؤشر طاقة إنجاز الواجبات -->
+        <div class="hw-energy-card">
+            <div class="hw-energy-title">
+                <h4>🔋 مؤشر إنجاز الواجبات</h4>
+                <span id="hwEnergyText" class="hw-energy-pct">0%</span>
+            </div>
+            <div class="energy-bar-wrapper" style="height: 12px; background: #e2e8f0; border: none;">
+                <div id="hwEnergyFill" class="energy-bar-fill" style="width: 0%; background: linear-gradient(90deg, #ef4444, #f59e0b);"></div>
+            </div>
+            <div class="hw-energy-details">
+                <span id="hwCompletedCount">✅ المنجزة: 0</span>
+                <span id="hwPendingCount">⏳ قيد الانتظار / لم ينجز: 0</span>
+                <span id="hwTotalCount">📚 الإجمالي: 0</span>
+            </div>
+        </div>
+
         <div class="stats-grid">
             <div class="stat-card" onclick="showDetails('exc')"><h4>التميز ✨</h4><p id="stat-exc">0</p></div>
             <div class="stat-card" onclick="showDetails('cre')"><h4>مبدع 🎨</h4><p id="stat-cre">0</p></div>
@@ -363,27 +392,25 @@
         });
     }
 
+    // تم التحديث للاستعلام الذكي باستخدام orderByChild لتقليل استهلاك البيانات وتسريع الدخول
     function login() {
         const u = cleanString(document.getElementById('userInput').value).toLowerCase();
         
-        database.ref('students').once('value', snap => {
-            let found = null, sK = "", cl = "", sId = "";
-            const data = snap.val() || {};
-            
-            for(let k in data) {
-                if(data[k].studentUser === u) {
-                    found = data[k]; sK = k; cl = data[k].className; sId = data[k].schoolId; break;
-                }
-            }
-            
-            if(found) {
+        database.ref('students').orderByChild('studentUser').equalTo(u).once('value', snap => {
+            if(snap.exists()) {
+                let data = snap.val();
+                let sK = Object.keys(data)[0]; 
+                let found = data[sK];
+                let cl = found.className;
+                let sId = found.schoolId;
+                
                 registerParentView(sK);
                 database.ref('tenants/' + sId).once('value', tSnap => {
                     let sName = tSnap.val()?.schoolName || "المدرسة المسجلة";
                     loadData(found, sK, cl, sName);
                 });
             } else {
-                document.getElementById('errorMsg').style.display='block';
+                document.getElementById('errorMsg').style.display = 'block';
             }
         });
     }
@@ -548,9 +575,12 @@
             const compList = document.getElementById('completedHwList');
             list.innerHTML = ""; compList.innerHTML = "";
             
+            let hwStats = { total: 0, done: 0, pending: 0, not_done: 0 };
+            
             if(!data) { 
                 list.innerHTML = "<div style='text-align:center; padding:50px'>لا توجد سجلات تقارير حالية</div>"; 
                 compList.innerHTML = "<div style='text-align:center; padding:50px'>لا يوجد سجل واجبات مكتملة</div>";
+                updateHwEnergyUI(hwStats);
                 return; 
             }
             
@@ -577,17 +607,26 @@
                 if(ev.award === 'bronze') stats.bronze++;
                 if(ev.warning) stats.warn++;
 
-                let fileBtnHtml = ev.worksheet ? `<div style="margin-top:10px;"><a href="${ev.worksheet}" download="ورقة_عمل.png" class="download-btn">📥 تحميل ورقة العمل المرفقة</a></div>` : "";
+                // استخدام target="_blank" للتحميل الآمن من Storage
+                let fileBtnHtml = ev.worksheet ? `<div style="margin-top:10px;"><a href="${ev.worksheet}" target="_blank" class="download-btn">📥 تحميل ورقة العمل المرفقة</a></div>` : "";
                 let unitLessonHtml = ev.unitLesson ? `<span class="unit-badge">📖 ${ev.unitLesson}</span>` : `<span class="unit-badge">📖 وحدة الدرس الحالية</span>`;
 
                 let currentHwStatus = ev.hwStatus || 'pending';
                 let hwBtnHtml = "";
                 
-                // إظهار حالة الواجب فقط إذا تم اعتمادها/تصحيحها من المعلم
-                if(ev.hwCorrected) {
-                    let hwBtnClass = currentHwStatus === 'done' ? 'hw-done' : 'hw-pending';
-                    let hwBtnText = currentHwStatus === 'done' ? '✅ تم الحل' : '❌ لم يحل الواجب';
-                    hwBtnHtml = `<span class="hw-btn ${hwBtnClass}">${hwBtnText}</span>`;
+                // حساب إحصائيات الواجبات وتحديد الحالة الظاهرة
+                if (ev.homework && ev.homework.trim() !== '') {
+                    hwStats.total++;
+                    if (currentHwStatus === 'done') {
+                        hwStats.done++;
+                        hwBtnHtml = `<span class="hw-btn hw-done">✅ تم إنجاز الواجب</span>`;
+                    } else if (currentHwStatus === 'not_done') {
+                        hwStats.not_done++;
+                        hwBtnHtml = `<span class="hw-btn hw-pending">❌ لم يتم إنجاز الواجب</span>`;
+                    } else {
+                        hwStats.pending++;
+                        hwBtnHtml = `<span class="hw-btn" style="background:#f1f5f9; color:#475569; border:1px solid #e2e8f0;">⏳ بانتظار تقييم المعلم</span>`;
+                    }
                 }
 
                 let itemHtml = `
@@ -597,7 +636,6 @@
                                 <small style="color:var(--text-muted)">${ev.date} | ${ev.time || ''}</small>
                                 <div style="font-weight:900; font-size:15px; margin-top:5px; display:flex; align-items:center; gap:5px; flex-wrap:wrap;">
                                     <span>مادة: ${ev.subject}</span> ${unitLessonHtml}
-                                    ${ev.hwCorrected ? `<span class="unit-badge" style="background:#10b981; color:white;">✔️ تم الاعتماد</span>` : ''}
                                 </div>
                             </div>
                             <span class="badge lvl-${ev.level}">${levelNames[ev.level] || 'تم الرصد'}</span>
@@ -617,7 +655,6 @@
                     </div>
                 `;
 
-                // في حال تم الحل، ينتقل التقييم إلى سجل الواجبات المكتملة
                 if(currentHwStatus === 'done') {
                     compList.innerHTML += itemHtml;
                 } else {
@@ -628,6 +665,8 @@
             if(hasUnseen) {
                 database.ref('evaluations/'+cls+'/'+sKey).update(updates);
             }
+
+            updateHwEnergyUI(hwStats);
 
             document.getElementById('stat-exc').innerText = stats.exc;
             document.getElementById('stat-cre').innerText = stats.cre;
@@ -640,6 +679,16 @@
             document.getElementById('stat-warn').innerText = stats.warn;
             document.getElementById('nafessGoldCount').innerText = stats.gold;
         });
+    }
+
+    function updateHwEnergyUI(hwStats) {
+        let hwPercent = hwStats.total > 0 ? Math.round((hwStats.done / hwStats.total) * 100) : 0;
+        document.getElementById('hwEnergyText').innerText = hwPercent + '%';
+        document.getElementById('hwEnergyFill').style.width = hwPercent + '%';
+        document.getElementById('hwEnergyFill').style.background = hwPercent >= 50 ? 'linear-gradient(90deg, #3b82f6, #10b981)' : 'linear-gradient(90deg, #ef4444, #f59e0b)';
+        document.getElementById('hwCompletedCount').innerText = `✅ المنجزة: ${hwStats.done}`;
+        document.getElementById('hwPendingCount').innerText = `⏳ قيد الانتظار / لم ينجز: ${hwStats.pending + hwStats.not_done}`;
+        document.getElementById('hwTotalCount').innerText = `📚 الإجمالي: ${hwStats.total}`;
     }
 
     function showDetails(type) {
